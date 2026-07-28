@@ -1,0 +1,26 @@
+@import "tailwindcss";
+
+@theme {
+  /* Derin Neon-Dark Arka Plan ve Kart Renkleri */
+  --color-background: #060607;
+  --color-surface: #0B0F17;
+  --color-surface-hover: #111827;
+  --color-surface-card: #0A0A0B;
+  
+  /* Neon Aksan Renkleri */
+  --color-brand-blue: #3B82F6;
+  --color-brand-purple: #8B5CF6;
+  --color-brand-emerald: #10B981;
+  --color-brand-amber: #F59E0B;
+  --color-brand-red: #EF4444;
+  
+  /* Tasarım Detayları */
+  --radius-xl: 0.75rem;
+  --shadow-neon: 0 0 20px -3px rgba(59, 130, 246, 0.4);
+}
+
+@layer base {
+  body {
+    @apply bg-[#060607] text-gray-100 antialiased selection:bg-blue-500/30;
+  }
+}
