@@ -15,6 +15,8 @@ import {
 } from "lucide-react"
 import { LiveIndicator } from "@/components/ui/live-indicator"
 import { Skeleton } from "@/components/ui/skeleton"
+import { AudioTrendRadar } from "@/components/widgets/audio-trend-radar"
+import { HashtagFrequencyRadar } from "@/components/widgets/hashtag-frequency-radar"
 
 interface TrendSensorPageProps {
   categoryMap?: Record<string, any>
@@ -312,6 +314,12 @@ export function TrendSensorPage({ categoryMap }: TrendSensorPageProps) {
           </div>
         </div>
       </div>
+
+      {/* NEW MODULES: AUDIO TREND RADAR & HASHTAG RADAR */}
+      <section className="space-y-6">
+        <AudioTrendRadar />
+        <HashtagFrequencyRadar />
+      </section>
     </div>
   )
 }

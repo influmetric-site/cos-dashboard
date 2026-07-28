@@ -4,6 +4,8 @@ import React, { useState } from "react"
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts"
 import { TrendingUp, Users, Zap, Clock, Info } from "lucide-react"
 import { LiveIndicator } from "@/components/ui/live-indicator"
+import { BestTimeHeatmap } from "@/components/widgets/best-time-heatmap"
+import { ViralitySimulator } from "@/components/widgets/virality-simulator"
 import { cn } from "@/utils/cn"
 
 interface GrowthAnalysisPageProps {
@@ -301,6 +303,12 @@ export function GrowthAnalysisPage({ categoryMap }: GrowthAnalysisPageProps) {
           </div>
         </div>
       </div>
+
+      {/* NEW MODULES: BEST TIME HEATMAP & VIRALITY SIMULATOR */}
+      <section className="space-y-6">
+        <BestTimeHeatmap />
+        <ViralitySimulator />
+      </section>
     </div>
   )
 }

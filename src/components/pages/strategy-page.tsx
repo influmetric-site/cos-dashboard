@@ -11,6 +11,8 @@ import {
   ShieldCheck,
   Clock
 } from "lucide-react"
+import { AiHookGenerator } from "@/components/widgets/ai-hook-generator"
+import { CompetitorMatrix } from "@/components/widgets/competitor-matrix"
 
 interface StrategyPageProps {
   categoryMap?: Record<string, any>
@@ -271,6 +273,12 @@ export function StrategyPage({ categoryMap }: StrategyPageProps) {
           ))}
         </div>
       </div>
+
+      {/* NEW MODULES: AI HOOK GENERATOR & COMPETITOR MATRIX */}
+      <section className="space-y-6 mt-10">
+        <AiHookGenerator />
+        <CompetitorMatrix />
+      </section>
     </div>
   )
 }

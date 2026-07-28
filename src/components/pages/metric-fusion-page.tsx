@@ -4,6 +4,8 @@ import React, { useState } from "react"
 import { Radar, RadarChart, PolarGrid, PolarAngleAxis, ResponsiveContainer } from "recharts"
 import { Shield, Target, Zap, ChevronDown, Info, Activity, MessageSquare, Crown } from "lucide-react"
 import { LiveIndicator } from "@/components/ui/live-indicator"
+import { PlatformFusionCard } from "@/components/widgets/platform-fusion-card"
+import { ChannelHealthScore } from "@/components/widgets/channel-health-score"
 import { cn } from "@/utils/cn"
 
 interface MetricFusionPageProps {
@@ -270,6 +272,12 @@ export function MetricFusionPage({ categoryMap }: MetricFusionPageProps) {
           ))}
         </div>
       </div>
+
+      {/* NEW MODULES: MULTI-PLATFORM FUSION & CHANNEL HEALTH */}
+      <section className="space-y-6">
+        <PlatformFusionCard />
+        <ChannelHealthScore />
+      </section>
     </div>
   )
 }

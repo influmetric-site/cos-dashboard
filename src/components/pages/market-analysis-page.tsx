@@ -4,6 +4,8 @@ import React, { useState } from "react"
 import { ShieldCheck, ChevronRight, BarChart3, Search, Zap } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { LiveIndicator } from "@/components/ui/live-indicator"
+import { RateCardGenerator } from "@/components/widgets/rate-card-generator"
+import { SponsorRevenueCalculator } from "@/components/widgets/sponsor-revenue-calculator"
 
 interface MarketAnalysisPageProps {
   categoryMap?: Record<string, any>
@@ -340,6 +342,12 @@ export function MarketAnalysisPage({ categoryMap }: MarketAnalysisPageProps) {
           </div>
         </div>
       </div>
+
+      {/* NEW MODULES: RATE CARD GENERATOR & REVENUE CALCULATOR */}
+      <section className="space-y-6">
+        <RateCardGenerator />
+        <SponsorRevenueCalculator />
+      </section>
     </div>
   )
 }
