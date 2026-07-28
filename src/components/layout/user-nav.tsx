@@ -3,7 +3,8 @@
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { createClient } from "@/utils/supabase/client"
-import { LogOut, Building2, Shield } from "lucide-react"
+import { LogOut, Building2, Shield, Sun, Moon } from "lucide-react"
+import { useTheme } from "@/components/theme-provider"
 
 interface UserNavProps {
   profile?: {
@@ -42,6 +43,7 @@ function getCompanyName(profile?: UserNavProps["profile"]) {
 export function UserNav({ profile }: UserNavProps) {
   const [loggingOut, setLoggingOut] = useState(false)
   const router = useRouter()
+  const { theme, toggleTheme } = useTheme()
 
   const handleLogout = async () => {
     setLoggingOut(true)
@@ -57,6 +59,19 @@ export function UserNav({ profile }: UserNavProps) {
 
   return (
     <div className="flex items-center gap-2 sm:gap-3 p-1.5 sm:p-2 sm:pl-4 bg-[#0A0A0E]/80 rounded-full border border-white/10 backdrop-blur-xl shadow-lg">
+      {/* Theme Toggle Button (Light/Dark Mode) */}
+      <button
+        onClick={toggleTheme}
+        title={theme === "dark" ? "Aydınlık Mod (White Mode)" : "Karanlık Mod (Dark Mode)"}
+        className="flex items-center justify-center p-2 rounded-full bg-white/[0.05] hover:bg-white/10 border border-white/10 text-amber-400 hover:text-amber-300 transition-all cursor-pointer min-h-[36px] min-w-[36px] active:scale-95"
+      >
+        {theme === "dark" ? (
+          <Sun size={15} className="text-amber-400" />
+        ) : (
+          <Moon size={15} className="text-indigo-400" />
+        )}
+      </button>
+
       {/* User Profile Details */}
       <div className="flex items-center gap-2.5">
         <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-blue-600 via-indigo-600 to-purple-600 flex items-center justify-center text-white text-xs font-black shadow-md border border-white/20">

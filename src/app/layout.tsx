@@ -19,6 +19,8 @@ export const metadata: Metadata = {
   description: "INFLUMETRIC COS® çekirdek algoritmaları ve analitik veri yönetim arayüzü.",
 };
 
+import { ThemeProvider } from "@/components/theme-provider";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -30,10 +32,12 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-[#060607] text-white font-sans selection:bg-blue-500/30">
-        <div className="flex min-h-screen">
-          <Sidebar />
-          <MainContent>{children}</MainContent>
-        </div>
+        <ThemeProvider>
+          <div className="flex min-h-screen">
+            <Sidebar />
+            <MainContent>{children}</MainContent>
+          </div>
+        </ThemeProvider>
       </body>
     </html>
   );

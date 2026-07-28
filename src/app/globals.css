@@ -21,7 +21,7 @@
 
 @layer base {
   body {
-    @apply bg-[#060607] text-gray-100 antialiased selection:bg-blue-500/30 overflow-x-hidden;
+    @apply bg-[#060607] text-gray-100 antialiased selection:bg-blue-500/30 overflow-x-hidden transition-colors duration-300;
   }
 
   /* Custom Professional Dark Scrollbars */
@@ -39,6 +39,55 @@
   ::-webkit-scrollbar-thumb:hover {
     background: rgba(59, 130, 246, 0.5);
   }
+}
+
+/* Light Mode Overrides */
+html.light body {
+  background-color: #F8FAFC !important;
+  color: #0F172A !important;
+}
+
+html.light .glass-card,
+html.light header,
+html.light aside,
+html.light nav {
+  background: rgba(255, 255, 255, 0.9) !important;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-color: rgba(15, 23, 42, 0.12) !important;
+  color: #0F172A !important;
+  box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.05);
+}
+
+html.light h1,
+html.light h2,
+html.light h3,
+html.light h4,
+html.light h5,
+html.light h6 {
+  color: #0F172A !important;
+}
+
+html.light p {
+  color: #334155 !important;
+}
+
+html.light .text-white {
+  color: #0F172A !important;
+}
+
+html.light .text-gray-300,
+html.light .text-gray-400,
+html.light .text-gray-500 {
+  color: #475569 !important;
+}
+
+html.light .bg-white\/\[0\.03\],
+html.light .bg-white\/\[0\.04\],
+html.light .bg-white\/\[0\.05\],
+html.light .bg-white\/10 {
+  background-color: rgba(15, 23, 42, 0.05) !important;
+  border-color: rgba(15, 23, 42, 0.1) !important;
 }
 
 /* Glassmorphism & UI Utilities */
