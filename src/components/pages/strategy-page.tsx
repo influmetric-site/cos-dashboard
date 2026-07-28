@@ -180,7 +180,7 @@ export function StrategyPage({ categoryMap }: StrategyPageProps) {
           ))}
 
           {/* ÖZEL STRATEJİ NOTU */}
-          <div className="mt-10 p-8 bg-gradient-to-br from-[#0B0F17] to-transparent border border-white/5 rounded-[3rem] relative overflow-hidden text-left shadow-xl">
+          <div className="mt-10 p-8 glass-card border border-white/10 rounded-[3rem] relative overflow-hidden text-left shadow-xl">
             <div className="absolute -right-10 -bottom-10 text-white/5 text-left">
               <ShieldCheck size={160} />
             </div>
@@ -197,7 +197,7 @@ export function StrategyPage({ categoryMap }: StrategyPageProps) {
         {/* SAĞ: DETAYLI İÇERİK PANELİ */}
         <div className="col-span-12 lg:col-span-8 text-left h-full">
           {strategicActions.map((action: StrategicAction) => action.id === activeTab && (
-            <div key={action.id} className="h-full bg-[#0B0F17]/80 border border-white/5 rounded-[3.5rem] p-12 backdrop-blur-xl animate-in slide-in-from-right-8 fade-in duration-1000 shadow-2xl text-left flex flex-col justify-between">
+            <div key={action.id} className="h-full glass-card border border-white/10 rounded-[3.5rem] p-12 backdrop-blur-xl animate-in slide-in-from-right-8 fade-in duration-1000 shadow-2xl text-left flex flex-col justify-between">
               
               <div className="text-left">
                 <div className="flex items-start justify-between mb-12 text-left">

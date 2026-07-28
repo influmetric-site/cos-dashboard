@@ -59,7 +59,7 @@ export function SponsorRevenueCalculator() {
           </div>
         </div>
 
-        <div className="p-6 rounded-2xl bg-gradient-to-br from-emerald-500/15 via-[#0A0A0E] to-transparent border border-emerald-500/30 flex flex-col items-center justify-center text-center space-y-2">
+        <div className="p-6 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 flex flex-col items-center justify-center text-center space-y-2">
           <TrendingUp size={24} className="text-emerald-400" />
           <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest italic">
             Aylık Tahmini Brüt Sponsorluk Geliri

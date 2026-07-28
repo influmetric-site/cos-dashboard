@@ -210,7 +210,7 @@ export function GrowthAnalysisPage({ categoryMap }: GrowthAnalysisPageProps) {
               className={cn(
                 "group transition-all duration-300 relative overflow-hidden border focus-visible:ring-2 focus-visible:ring-blue-500 outline-none cursor-pointer min-h-[48px]",
                 expandedId === card.id
-                  ? "bg-gradient-to-br from-blue-600/15 via-[#0A0A0E] to-transparent border-blue-500/40 rounded-[2rem] shadow-2xl"
+                  ? "bg-gradient-to-br from-blue-600/15 via-blue-900/10 to-white/5 border-blue-500/40 rounded-[2rem] shadow-2xl"
                   : "glass-card rounded-[1.5rem] hover:border-white/20"
               )}
               onClick={() => setExpandedId(expandedId === card.id ? null : card.id)}

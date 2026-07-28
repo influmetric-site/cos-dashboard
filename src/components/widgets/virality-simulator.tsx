@@ -85,7 +85,7 @@ export function ViralitySimulator() {
         </div>
 
         {/* Output Score Box */}
-        <div className="p-6 rounded-2xl bg-gradient-to-br from-amber-500/15 via-[#0A0A0E] to-transparent border border-amber-500/30 flex flex-col items-center justify-center text-center space-y-2">
+        <div className="p-6 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex flex-col items-center justify-center text-center space-y-2">
           <Sparkles size={24} className="text-amber-400 animate-bounce" />
           <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest italic">
             Tahmini Viralleşme Skoru
