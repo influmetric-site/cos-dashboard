@@ -2,7 +2,14 @@
 
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from "recharts"
 
-const data = [
+interface GrowthIndicatorsProps {
+  data?: {
+    title?: string
+    indicators?: Array<{ name: string; value: number; label?: string }>
+  }
+}
+
+const defaultIndicators = [
   { name: "Erişim", value: 75, label: "+278%" },
   { name: "Etkileşim", value: 55, label: "+156%" },
   { name: "Dönüşüm", value: 65, label: "+189%" },
@@ -10,13 +17,16 @@ const data = [
   { name: "Gelir", value: 85, label: "+219%" },
 ]
 
-export function GrowthIndicators() {
+export function GrowthIndicators({ data }: GrowthIndicatorsProps) {
+  const title = data?.title ?? "BÜYÜME GÖSTERGELERİ"
+  const indicators = data?.indicators ?? defaultIndicators
+
   return (
     <div className="bg-surface border border-white/5 p-6 rounded-2xl h-full flex flex-col">
-      <h3 className="text-[10px] font-bold tracking-[0.2em] text-gray-500 uppercase mb-6">BÜYÜME GÖSTERGELERİ</h3>
+      <h3 className="text-[10px] font-bold tracking-[0.2em] text-gray-500 uppercase mb-6">{title}</h3>
       <div className="flex-1 w-full min-h-[250px] min-w-0">
         <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={250}>
-          <BarChart data={data}>
+          <BarChart data={indicators}>
             <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" vertical={false} />
             <XAxis 
               dataKey="name" 
@@ -45,7 +55,7 @@ export function GrowthIndicators() {
               radius={[4, 4, 0, 0]} 
               barSize={40}
             >
-              {data.map((entry, index) => (
+              {indicators.map((entry, index) => (
                 <Cell key={`cell-${index}`} fill="url(#barGradient)" />
               ))}
             </Bar>

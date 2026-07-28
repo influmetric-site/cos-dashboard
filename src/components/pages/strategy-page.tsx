@@ -1,32 +1,43 @@
 "use client"
 
-import React, { useState, useEffect } from "react"
+import React, { useState } from "react"
 import { 
-  Target, 
-  Lightbulb, 
   BrainCircuit, 
   CheckCircle2,
   Lock,
   Play,
-  Camera,
-  Users,
-  Search,
-  Sparkles,
+  Lightbulb,
   Zap,
   ShieldCheck,
   Clock
 } from "lucide-react"
 
-const strategicActions = [
+interface StrategyPageProps {
+  categoryMap?: Record<string, any>
+}
+
+interface StrategicAction {
+  id: string
+  type: string
+  title: string
+  impact: string
+  urgency: string
+  desc: string
+  insight: string
+  steps: string[]
+  icon: any
+}
+
+const defaultStrategicActions: StrategicAction[] = [
   {
     id: "content-pivot",
     type: "ALGORİTMA PİVOTU",
     title: "Yüksek Tempolu 'GRWM' Optimizasyonu",
     impact: "Yüksek",
     urgency: "Hemen",
-    desc: "Veriler, makyaj ve kombin hazırlık (GRWM) videolarındaki hızlı 'geçiş' (transition) anlarında izleyicinin %40 daha fazla kaldığını gösteriyor. Cilt bakım rutinleri için kritik.",
-    insight: "Sabah rutinindeki o 3 saniyelik serum uygulama anını macro çekimle loop'a al; lifestyle kitlesi bu mikro estetik detaylara bayılıyor.",
-    steps: ["3 saniyelik macro ürün çekimleri ekle", "Ses kanalına 'Fısıltı/ASMR' dokunuşu yap", "Yorumlarda rutin adımlarının sorulmasını tetikle"],
+    desc: "Veriler, hazırlık (GRWM) videolarındaki hızlı geçiş anlarında izleyicinin %40 daha fazla kaldığını gösteriyor.",
+    insight: "Sabah rutinindeki o 3 saniyelik serum uygulama anını macro çekimle loop'a al.",
+    steps: ["3 saniyelik macro ürün çekimleri ekle", "Ses kanalına ASMR dokunuşu yap", "Yorumlarda etkileşim tetikle"],
     icon: Play
   },
   {
@@ -35,21 +46,10 @@ const strategicActions = [
     title: "Günlük 'This or That' Serisi",
     impact: "Orta",
     urgency: "Her Gün",
-    desc: "Günlük olarak paylaşılan 'Bugün hangisi?' konulu kısa hikayeler, algoritmanın seni 'aktif stil ikonu' kategorisinde tutmasını sağlar.",
-    insight: "İki farklı ruj tonunu veya ceket kombinini paylaşıp takipçilerine kendi favorilerini sor; etkileşim çarpanı %2.4 artacaktır.",
-    steps: ["Günün iki farklı opsiyonunu hazırla", "Story'de anket (This or That) aç", "Gelen cevapları 'Stil Önerileri'ne ekle"],
+    desc: "Günlük olarak paylaşılan kısa hikayeler, algoritmanın seni aktif tutmasını sağlar.",
+    insight: "İki farklı opsiyonu paylaşıp takipçilerine kendi favorilerini sor.",
+    steps: ["Günün iki farklı opsiyonunu hazırla", "Story'de anket aç", "Gelen cevapları değerlendir"],
     icon: Clock
-  },
-  {
-    id: "community-hook",
-    type: "KİTLE PSİKOLOJİSİ",
-    title: "Yorumdan Hikayeye Köprü Stratejisi",
-    impact: "Orta",
-    urgency: "24 Saat",
-    desc: "En çok etkileşim alan 'Cilt bakım efsaneleri' yorumunu alıp, hikayede 'Sizce bu doğru mu?' anketiyle paylaşmak algoritmayı tetikliyor.",
-    insight: "Takipçilerin seninle kendi deneyimlerini tartışmasına izin ver; bu, topluluk sadakatini (Fidelity) %18 artırıyor.",
-    steps: ["Top 3 deneyim/soru yorumunu seç", "Hikayede anketle karşılaştır", "Gelen cevapları Soru-Cevap Reels'ine dönüştür"],
-    icon: Users
   },
   {
     id: "growth-hack",
@@ -57,50 +57,61 @@ const strategicActions = [
     title: "Niş Dışı Keşfet Yayılımı",
     impact: "Kritik",
     urgency: "Haftalık",
-    desc: "COS® motoru, kitlelerin sadece makyaj/moda değil, arka plandaki 'Minimalist Oda Estetiği' aramalarına da eğilim gösterdiğini saptadı.",
-    insight: "Kameranı sadece aynaya değil, hazırlandığın alanın genel estetiğine çevir; dekorasyon ve lifestyle kitlesine de yeni bir kapı açılacak.",
-    steps: ["Arka plan estetiğini (Aesthetic Room) vurgula", "Minimalist yaşam hashtag'leri kullan", "Kamera açısını genişlet (0.5x mod)"],
-    icon: Search
-  },
-  {
-    id: "aesthetic-upgrade",
-    type: "GÖRSEL KİMLİK",
-    title: "Soft-Minimalist Renk Paleti",
-    impact: "Yüksek",
-    urgency: "Haftalık",
-    desc: "İzleyici artık aşırı filtrelenmiş (Heavy-filter) içerikler yerine 'Clean Girl' estetiğine, doğal ışığa ve pastel tonlara daha fazla 'premium' tepkisi veriyor.",
-    insight: "Videolarındaki renk sıcaklığını (Warmth) hafifçe artırıp kontrastı düşür; bu, ten dokusunu ve kumaşları çok daha lüks ve doğal gösterir.",
-    steps: ["Doğal gün ışığı (Golden Hour) kullan", "Aşırı kontrastı düşür (Soft-edit)", "Kapak fotoğraflarında pastel tonlar seç"],
-    icon: Sparkles
+    desc: "Aesthetic Room odaklı görsel arkaplanlar geniş kitle etkileşimini tetikliyor.",
+    insight: "Kamera açısını genişlet (0.5x mod) ve doğal gün ışığını arka plana al.",
+    steps: ["Arka plan estetiğini vurgula", "Minimalist yaşam hashtag'leri kullan", "Kamera açısını genişlet"],
+    icon: Play
   }
 ]
 
-const getUrgencyStyles = (urgency: string) => {
-  switch (urgency) {
-    case 'Hemen':
-      return 'bg-red-500/20 text-red-400 border-red-500/30'
-    case 'Her Gün':
-    case '24 Saat':
-      return 'bg-amber-500/20 text-amber-400 border-amber-500/30'
-    case 'Haftalık':
-      return 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30'
-    default:
-      return 'bg-blue-500/20 text-blue-400'
-  }
-}
+export function StrategyPage({ categoryMap }: StrategyPageProps) {
+  const stratData = categoryMap?.['page_strateji'] || categoryMap?.['growth_strategy'] || {}
+  const pageTitle = stratData.title || "Stratejik Yol Haritası"
+  const pageSubtitle = stratData.subtitle || "Algoritmik Öngörü ve İçerik Uygulama Protokolleri"
+  
+  const customActions = Array.isArray(stratData.actions) && stratData.actions.length > 0
+    ? stratData.actions
+    : (Array.isArray(stratData.strategies) && stratData.strategies.length > 0 ? stratData.strategies : null)
 
-export function StrategyPage() {
-  const [activeTab, setActiveTab] = useState(strategicActions[0].id)
+  const strategicActions: StrategicAction[] = customActions
+    ? customActions.map((s: any, idx: number) => ({
+        id: s.id ? String(s.id) : `action-${idx}`,
+        type: s.type || s.status || "ALGORİTMA PİVOTU",
+        title: s.title || `Strateji Adımı #${idx + 1}`,
+        impact: s.impact || (s.impact_score > 90 ? "Kritik" : "Yüksek"),
+        urgency: s.urgency || (s.status === "Planlandı" ? "24 Saat" : "Hemen"),
+        desc: s.desc || `Beklenen sonuç: ${s.result || "Yüksek büyüme"}. Influmetric algoritma modelleri tarafınca doğrulanmıştır.`,
+        insight: s.insight || `${s.title} adımı ile kanal performansınızı yükseltebilirsiniz.`,
+        steps: Array.isArray(s.steps) ? s.steps : [`${s.title} kurgusunu başlat`, "İçerik takvimine ekle", "Sonuçları haftalık raporda incele"],
+        icon: idx % 2 === 0 ? Play : Clock
+      }))
+    : defaultStrategicActions
+
+  const [selectedTab, setSelectedTab] = useState<string | null>(null)
   const [isApproved, setIsApproved] = useState(false)
 
-  useEffect(() => {
-    setIsApproved(false)
-  }, [activeTab])
+  const activeTab = (selectedTab && strategicActions.some(a => a.id === selectedTab))
+    ? selectedTab
+    : (strategicActions[0]?.id || "content-pivot")
+
+  const getUrgencyStyles = (urgency: string) => {
+    switch (urgency) {
+      case 'Hemen':
+        return 'bg-red-500/20 text-red-400 border-red-500/30'
+      case 'Her Gün':
+      case '24 Saat':
+        return 'bg-amber-500/20 text-amber-400 border-amber-500/30'
+      case 'Haftalık':
+        return 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30'
+      default:
+        return 'bg-blue-500/20 text-blue-400'
+    }
+  }
 
   return (
     <div className="animate-in fade-in slide-in-from-bottom-6 duration-1000 pb-20 text-left">
       
-      {/* ÜST PANEL - Aşama 03 Güncellemesi */}
+      {/* ÜST PANEL */}
       <div className="flex flex-col md:flex-row justify-between items-center gap-8 bg-[#0B0F17]/80 p-10 rounded-[3.5rem] border border-white/5 backdrop-blur-2xl shadow-2xl mb-10 text-left">
         <div className="text-left w-full md:w-auto space-y-2">
           <div className="flex items-center gap-2 mb-1 text-left">
@@ -108,17 +119,17 @@ export function StrategyPage() {
             <span className="text-[10px] text-blue-500 font-black tracking-[0.3em] uppercase italic text-left">Aşama 04 / Haftalık Masterplan</span>
           </div>
           <h2 className="text-5xl font-black text-white italic uppercase tracking-tighter leading-none text-left">
-            Stratejik <span className="text-blue-500 text-left">Yol Haritası</span>
+            {pageTitle}
           </h2>
           <p className="text-[10px] text-gray-500 font-bold uppercase tracking-[0.2em] italic text-left">
-            Algoritmik Öngörü ve İçerik Uygulama Protokolleri
+            {pageSubtitle}
           </p>
         </div>
         
         <div className="flex gap-4 w-full md:w-auto justify-end text-left">
           <button 
             onClick={() => setIsApproved(!isApproved)}
-            className={`px-12 py-5 rounded-[2rem] flex items-center gap-4 transition-all duration-700 transform hover:scale-105 active:scale-95 group ${
+            className={`px-12 py-5 rounded-[2rem] flex items-center gap-4 transition-all duration-700 transform hover:scale-105 active:scale-95 group cursor-pointer ${
               isApproved 
               ? 'bg-emerald-600 shadow-[0_0_40px_rgba(16,185,129,0.3)]' 
               : 'bg-blue-600 shadow-[0_0_30px_rgba(37,99,235,0.3)]'
@@ -136,11 +147,11 @@ export function StrategyPage() {
         
         {/* SOL: STRATEJİ LİSTESİ */}
         <div className="col-span-12 lg:col-span-4 space-y-4 text-left">
-          {strategicActions.map((action) => (
+          {strategicActions.map((action: StrategicAction) => (
             <button
               key={action.id}
-              onClick={() => setActiveTab(action.id)}
-              className={`w-full p-7 rounded-[2.5rem] border transition-all duration-700 text-left relative overflow-hidden group ${
+              onClick={() => setSelectedTab(action.id)}
+              className={`w-full p-7 rounded-[2.5rem] border transition-all duration-700 text-left relative overflow-hidden group cursor-pointer ${
                 activeTab === action.id 
                 ? 'bg-white/[0.08] border-blue-500/30 shadow-2xl translate-x-2' 
                 : 'bg-white/[0.02] border-white/5 hover:border-white/10'
@@ -171,7 +182,7 @@ export function StrategyPage() {
             <div className="absolute -right-10 -bottom-10 text-white/5 text-left">
               <ShieldCheck size={160} />
             </div>
-            <div className="flex items-center gap-3 mb-4 relative z-10 text-left text-left">
+            <div className="flex items-center gap-3 mb-4 relative z-10 text-left">
               <Lock size={16} className="text-blue-500" />
               <span className="text-[10px] text-blue-500 font-black uppercase tracking-[0.2em] italic text-left">Kişiye Özel Protokol</span>
             </div>
@@ -183,13 +194,13 @@ export function StrategyPage() {
 
         {/* SAĞ: DETAYLI İÇERİK PANELİ */}
         <div className="col-span-12 lg:col-span-8 text-left h-full">
-          {strategicActions.map((action) => action.id === activeTab && (
+          {strategicActions.map((action: StrategicAction) => action.id === activeTab && (
             <div key={action.id} className="h-full bg-[#0B0F17]/80 border border-white/5 rounded-[3.5rem] p-12 backdrop-blur-xl animate-in slide-in-from-right-8 fade-in duration-1000 shadow-2xl text-left flex flex-col justify-between">
               
               <div className="text-left">
                 <div className="flex items-start justify-between mb-12 text-left">
                   <div className="space-y-4 text-left">
-                    <div className="flex items-center gap-2 text-left text-left">
+                    <div className="flex items-center gap-2 text-left">
                       <div className={`w-2 h-2 rounded-full ${
                          action.urgency === 'Hemen' ? 'bg-red-500 animate-pulse' : 
                          (action.urgency === 'Haftalık' ? 'bg-emerald-500' : 'bg-amber-500')

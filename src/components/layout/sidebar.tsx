@@ -8,7 +8,7 @@ import {
 } from "lucide-react"
 
 const navItems = [
-  { id: "genel", name: "Genel Bakış", href: "/", icon: LayoutGrid, color: "blue" },
+  { id: "genel", name: "Genel Bakış", href: "/cos", icon: LayoutGrid, color: "blue" },
   { id: "metrik", name: "Metrik Füzyonu", href: "/metrik", icon: Activity, color: "blue" },
   { id: "buyume", name: "Büyüme Analizi", href: "/buyume", icon: TrendingUp, color: "blue" },
   { id: "performans", name: "Performans", href: "/performans", icon: Activity, color: "blue" },
@@ -20,8 +20,12 @@ const navItems = [
 
 export function Sidebar() {
   const pathname = usePathname()
+
+  // Hide Sidebar on Login Page
+  if (pathname === "/login") {
+    return null
+  }
   
-  // Dinamik Renk Belirleyici
   const getColorClasses = (color: string, isActive: boolean) => {
     if (!isActive) return "text-gray-300 hover:text-white hover:bg-white/[0.05]";
     
@@ -43,9 +47,9 @@ export function Sidebar() {
   return (
     <aside className="w-64 h-screen bg-[#0A0A0B] border-r border-white/5 flex flex-col fixed left-0 top-0 z-50 overflow-hidden font-sans">
       
-      {/* LOGO ALANI - COS® ORİJİNAL KİMLİK */}
+      {/* LOGO AREA */}
       <div className="p-8 border-b border-white/5">
-        <Link href="/">
+        <Link href="/cos">
           <h1 className="text-xl font-bold text-white tracking-tight leading-none uppercase italic cursor-pointer">
             COS<sup className="text-[10px] font-normal opacity-50 ml-0.5 not-italic">®</sup>
             <div className="text-[10px] tracking-[0.3em] text-gray-500 font-medium mt-1 uppercase not-italic">Zekâ Çekirdeği</div>
@@ -53,7 +57,7 @@ export function Sidebar() {
         </Link>
       </div>
 
-      {/* NAVİGASYON - OKUNABİLİR VE SCROLLBARSIZ */}
+      {/* NAVIGATION */}
       <nav className="flex-1 px-4 py-4 space-y-1 overflow-y-auto no-scrollbar">
         {navItems.map((item) => {
           const isActive = pathname === item.href;
@@ -84,13 +88,12 @@ export function Sidebar() {
         })}
       </nav>
 
-      {/* KİŞİSELLEŞTİRİLMİŞ OPERASYONEL PANEL */}
+      {/* OPERATIONAL VIZOR */}
       <div className="p-5 m-4 bg-white/[0.02] border border-white/5 rounded-[1.5rem] group hover:bg-white/[0.04] transition-all duration-500 shadow-2xl">
         <div className="flex items-center justify-between mb-3">
           <span className="text-[9px] text-gray-500 uppercase font-black tracking-[0.15em] italic">
             Operasyonel Vizör
           </span>
-          {/* Canlı Sinyal Işığı */}
           <div className="relative flex items-center justify-center">
             <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full z-10" />
             <div className="absolute inset-0 w-1.5 h-1.5 bg-emerald-500 rounded-full animate-ping opacity-60" />
@@ -99,7 +102,7 @@ export function Sidebar() {
         
         <div className="space-y-1.5">
           <p className="text-[11px] text-gray-300 font-medium tracking-tight">
-            Aktif İzleme: <span className="text-white font-black italic">@batur</span>
+            Aktif İzleme: <span className="text-white font-black italic">Sistem Paneli</span>
           </p>
           <div className="flex items-center gap-1.5">
             <div className="w-1 h-1 bg-emerald-500/50 rounded-full" />
@@ -110,7 +113,6 @@ export function Sidebar() {
         </div>
       </div>
 
-      {/* Global CSS for hidden scrollbar */}
       <style jsx global>{`
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }

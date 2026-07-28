@@ -4,70 +4,89 @@ import React, { useState } from "react"
 import { Radar, RadarChart, PolarGrid, PolarAngleAxis, ResponsiveContainer } from "recharts"
 import { Shield, Target, Zap, ChevronDown, Info, Activity, MessageSquare, Crown } from "lucide-react"
 
-const radarData = [
-  { subject: 'Erişim', A: 120, fullMark: 150 },
-  { subject: 'Etkileşim', A: 98, fullMark: 150 },
-  { subject: 'Sadakat', A: 135, fullMark: 150 },
-  { subject: 'Hız', A: 99, fullMark: 150 },
-  { subject: 'Orijinallik', A: 110, fullMark: 150 },
-  { subject: 'Büyüme', A: 85, fullMark: 150 },
+interface MetricFusionPageProps {
+  categoryMap?: Record<string, any>
+}
+
+const defaultRadarData = [
+  { subject: 'Erişim', A: 145, fullMark: 150 },
+  { subject: 'Etkileşim', A: 138, fullMark: 150 },
+  { subject: 'Sadakat', A: 142, fullMark: 150 },
+  { subject: 'Hız', A: 125, fullMark: 150 },
+  { subject: 'Orijinallik', A: 130, fullMark: 150 },
+  { subject: 'Büyüme', A: 120, fullMark: 150 },
 ]
 
-const detailCards = [
-  { 
-    id: "rezonans",
-    title: "Kitle Rezonansı", 
-    score: "88/100", 
-    label: "ORGANİK MOMENTUM",
-    desc: "İçerikler hedef kitle ile tam uyumlu.", 
-    longDesc: "Lifestyle içeriklerinin takipçi kitlesiyle kurduğu duygusal ve semantik bağın katsayısıdır. Kaydedilme oranları ve DM üzerinden gelen etkileşim hızı bu skoru belirleyen ana metriklerdir.",
-    icon: Target, 
-    params: { "Uyum": "%94", "Örneklem": "Lifestyle", "Güven": "Yüksek" }
-  },
-  { 
-    id: "otorite",
-    title: "İçerik Otoritesi", 
-    score: "91/100", 
-    label: "NICHE DOMINANCE",
-    desc: "Dikeydeki uzmanlık ve referans puanı.", 
-    longDesc: "Belirlenen niş içerisindeki 'Authority Score', takipçilerin paylaşılan bilgiyi veya hayat tarzını ne kadar 'referans' olarak gördüğünü ölçer. Marka iş birliklerindeki ikna gücünü temsil eder.",
-    icon: Crown, 
-    params: { "Dikey": "Vlog", "Rekabet": "Düşük", "Otorite": "Yüksek" }
-  },
-  { 
-    id: "duygu",
-    title: "Duygu Analizi", 
-    score: "%96", 
-    label: "SENTIMENT ANALYSIS",
-    desc: "Geri bildirimlerin semantik özeti.", 
-    longDesc: "COS® NLP (Doğal Dil İşleme) motoru, yorumlardaki duygu tonunu analiz eder. %96 Pozitif skor, kitlenin sadece izlemediğini, aynı zamanda içerik üreticisine yüksek güven duyduğunu gösterir.",
-    icon: MessageSquare, 
-    params: { "Ton": "Samimi", "Pozitif": "%96", "Negatif": "%1" }
-  },
-  { 
-    id: "butunluk",
-    title: "Veri Doğrulaması", 
-    score: "99.9%", 
-    label: "VERİ SADAKATİ",
-    desc: "48 boyutta çapraz doğrulama aktif.", 
-    longDesc: "Sosyal medya API'lerinden gelen ham veriler manipülasyona karşı taranır. %99.9'luk skor, Influmetric'in sunduğu verilerin ticari kararlar için mutlak güvenilirliğini tescil eder.",
-    icon: Shield, 
-    params: { "Sinyal": "48 Katman", "Hata": "%0.01", "Kontrol": "AI-Sync" }
-  },
-  { 
-    id: "ai",
-    title: "YZ Trend Tahmini", 
-    score: "93.4%", 
-    label: "ÖNGÖRÜ MOTORU",
-    desc: "Gelecek 90 günün büyüme simülasyonu.", 
-    longDesc: "Lifestyle dikeyindeki global trendleri analiz ederek, mevcut kitle yorgunluğunu ölçer. Hangi içerik formatlarının (Reels/Vlog) önümüzdeki dönemde 'hype' yakalayacağını matematiksel olarak öngörür.",
-    icon: Zap, 
-    params: { "Model": "COS-v4", "Gecikme": "14ms", "Tahmin": "90 Gün" }
-  },
-]
-
-export function MetricFusionPage() {
+export function MetricFusionPage({ categoryMap }: MetricFusionPageProps) {
   const [expandedId, setExpandedId] = useState<string | null>("rezonans")
+
+  const analytics = categoryMap?.['analytics'] || categoryMap?.['page_metrik'] || {}
+  const pageTitle = analytics.title || "Çok Boyutlu Performans Ağı"
+  const pageSubtitle = analytics.subtitle || "COS® Zekâ Çekirdeği Tarafından Sentezlenen Veri Füzyonu"
+  const globalScore = analytics.score_value ?? 95.8
+  const scoreVal = `${globalScore}/100`
+
+  const totalViews = analytics.kpi_metrics?.[0]?.value || "2.4M"
+  const audienceLoyalty = analytics.kpi_metrics?.[1]?.value || "92.4%"
+
+  const radarData = Array.isArray(analytics.radar_data) && analytics.radar_data.length > 0
+    ? analytics.radar_data.map((r: any) => ({ subject: r.subject || r.name, A: r.A || r.value, fullMark: 150 }))
+    : (Array.isArray(analytics.chart_data) && analytics.chart_data.length > 0
+        ? analytics.chart_data.map((r: any) => ({ subject: r.name, A: r.value, fullMark: 150 }))
+        : defaultRadarData)
+
+  const detailCards = [
+    { 
+      id: "rezonans",
+      title: analytics.score_title || "Kitle Rezonansı", 
+      score: audienceLoyalty, 
+      label: "ORGANİK MOMENTUM",
+      desc: "İçerikler hedef kitle ile tam uyumlu.", 
+      longDesc: `Lifestyle ve niş içeriklerin takipçi kitlesiyle kurduğu duygusal ve semantik bağın katsayısıdır. Toplam ${totalViews} izlenme ve kaydedilme oranları bu skoru belirleyen ana metriklerdir.`,
+      icon: Target, 
+      params: { "Uyum": audienceLoyalty, "Taranan": analytics.scanned_profiles || "1,450+ Profil", "İşlenen": analytics.processed_data_points || "920K Veri" }
+    },
+    { 
+      id: "otorite",
+      title: "İçerik Otoritesi", 
+      score: `${globalScore}/100`, 
+      label: "NICHE DOMINANCE",
+      desc: "Dikeydeki uzmanlık ve referans puanı.", 
+      longDesc: `Belirlenen niş içerisindeki 'Authority Score', takipçilerin paylaşılan bilgiyi ne kadar referans aldığını gösterir. Global skor ${globalScore} olarak ölçülmüştür.`,
+      icon: Crown, 
+      params: { "Dikey": "Performans", "Rekabet": "Düşük", "Otorite": "Yüksek" }
+    },
+    { 
+      id: "duygu",
+      title: "Duygu Analizi", 
+      score: audienceLoyalty, 
+      label: "SENTIMENT ANALYSIS",
+      desc: "Geri bildirimlerin semantik özeti.", 
+      longDesc: `COS® NLP motoru, yorumlardaki duygu tonunu analiz eder. ${audienceLoyalty} Pozitif skor kitlenin yüksek güvenini kanıtlar.`,
+      icon: MessageSquare, 
+      params: { "Ton": "Samimi", "Pozitif": audienceLoyalty, "Negatif": "%1" }
+    },
+    { 
+      id: "butunluk",
+      title: "Veri Doğrulaması", 
+      score: "99.9%", 
+      label: "VERİ SADAKATİ",
+      desc: "48 boyutta çapraz doğrulama aktif.", 
+      longDesc: "Sosyal medya API'lerinden gelen veriler manipülasyona karşı 48 katmanda taranır.",
+      icon: Shield, 
+      params: { "Sinyal": "48 Katman", "Hata": "%0.01", "Kontrol": "AI-Sync" }
+    },
+    { 
+      id: "ai",
+      title: "YZ Trend Tahmini", 
+      score: `${globalScore}%`, 
+      label: "ÖNGÖRÜ MOTORU",
+      desc: "Gelecek 90 günün büyüme simülasyonu.", 
+      longDesc: "Global trendleri analiz ederek kitle yorgunluğunu ve viral format olasılıklarını matematiksel olarak öngörür.",
+      icon: Zap, 
+      params: { "Model": "COS-v4", "Gecikme": "14ms", "Tahmin": "90 Gün" }
+    },
+  ]
 
   return (
     <div className="animate-in fade-in slide-in-from-bottom-4 duration-1000 pb-20 text-left">
@@ -84,8 +103,8 @@ export function MetricFusionPage() {
               <Activity size={14} className="text-blue-500" />
               <span className="text-[10px] text-blue-500 font-black tracking-[0.3em] uppercase italic text-left">Aşama 01 / İleri Sinirsel Harita</span>
             </div>
-            <h3 className="text-4xl font-black text-white italic uppercase tracking-tighter text-left">Çok Boyutlu <span className="text-blue-500">Performans</span> Ağı</h3>
-            <p className="text-xs text-gray-500 mt-2 font-bold italic uppercase tracking-wider text-left">COS® Zekâ Çekirdeği Tarafından Sentezlenen Veri Füzyonu</p>
+            <h3 className="text-4xl font-black text-white italic uppercase tracking-tighter text-left">{pageTitle}</h3>
+            <p className="text-xs text-gray-500 mt-2 font-bold italic uppercase tracking-wider text-left">{pageSubtitle}</p>
           </div>
           
           <div className="h-[500px] w-full flex items-center justify-center min-w-0">
@@ -111,7 +130,7 @@ export function MetricFusionPage() {
 
         {/* SAĞ PANEL: TIKLANABİLİR DETAY KARTLARI */}
         <div className="col-span-12 lg:col-span-5 space-y-4">
-          {detailCards.map((card) => (
+          {detailCards.map((card: any) => (
             <div 
               key={card.id} 
               role="button"
@@ -173,10 +192,10 @@ export function MetricFusionPage() {
                     </div>
 
                     <div className="grid grid-cols-3 gap-3">
-                      {Object.entries(card.params).map(([key, val]) => (
+                      {Object.entries(card.params || {}).map(([key, val]) => (
                         <div key={key} className="bg-white/5 border border-white/5 rounded-2xl p-3 text-center">
                           <div className="text-[8px] text-gray-600 font-black uppercase mb-1 tracking-widest">{key}</div>
-                          <div className="text-[10px] font-black text-gray-200 italic uppercase">{val}</div>
+                          <div className="text-[10px] font-black text-gray-200 italic uppercase">{String(val)}</div>
                         </div>
                       ))}
                     </div>

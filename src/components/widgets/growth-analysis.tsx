@@ -2,7 +2,14 @@
 
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts"
 
-const data = [
+interface GrowthAnalysisProps {
+  data?: {
+    title?: string
+    chart_data?: Array<{ name: string; value: number }>
+  }
+}
+
+const defaultData = [
   { name: "01 May", value: 25 }, { name: "04 May", value: 45 },
   { name: "08 May", value: 38 }, { name: "12 May", value: 60 },
   { name: "15 May", value: 72 }, { name: "18 May", value: 55 },
@@ -10,15 +17,18 @@ const data = [
   { name: "29 May", value: 95 }, { name: "31 May", value: 100 },
 ]
 
-export function GrowthAnalysis() {
+export function GrowthAnalysis({ data }: GrowthAnalysisProps) {
+  const title = data?.title ?? "STRATEJİK BÜYÜME ANALİZİ"
+  const chartData = data?.chart_data ?? defaultData
+
   return (
     <div className="bg-surface border border-white/5 p-6 rounded-2xl h-full flex flex-col">
       <h3 className="text-[10px] font-bold tracking-[0.2em] text-gray-500 uppercase mb-6">
-        STRATEJİK BÜYÜME ANALİZİ
+        {title}
       </h3>
       <div className="flex-1 w-full min-h-[200px] min-w-0">
         <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={200}>
-          <AreaChart data={data}>
+          <AreaChart data={chartData}>
             <defs>
               <linearGradient id="growthGradient" x1="0" y1="0" x2="0" y2="1">
                 <stop offset="5%" stopColor="#3B82F6" stopOpacity={0.3}/>

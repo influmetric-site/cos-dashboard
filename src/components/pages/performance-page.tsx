@@ -2,66 +2,98 @@
 
 import React, { useState } from "react"
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from "recharts"
-import { BarChart3, Zap, Eye, MessageSquare, Share2, ChevronDown, Info, Activity, Users, Camera, Play, MessageCircle } from "lucide-react"
+import { BarChart3, Eye, MessageSquare, Share2, ChevronDown, Info, Activity, Users, Camera, Play, MessageCircle } from "lucide-react"
 
-const performanceData = [
-  { action: 'Reels', score: 92, color: '#3B82F6' },
-  { action: 'Post', score: 74, color: '#60A5FA' },
-  { action: 'Hikaye', score: 85, color: '#93C5FD' },
-  { action: 'Yorum', score: 68, color: '#BFDBFE' },
-  { action: 'Topluluk', score: 90, color: '#2563EB' },
-]
+interface PerformancePageProps {
+  categoryMap?: Record<string, any>
+}
 
-const actionCards = [
+const defaultActionCards = [
   {
     id: "reels",
     title: "Reels Dinamiği",
-    score: "92/100",
+    score: "96/100",
     label: "VİDEO PERFORMANSI",
-    longDesc: "Vlog ve lifestyle temalı Reels içeriklerin, Keşfet algoritmasında %65 daha fazla tutulma sağlıyor. Özellikle 'Günlük Rutin' serilerinin izlenme süresi platform ortalamasının üzerinde.",
+    longDesc: "Reels içeriklerinizin algoritma tutulma katsayısı yüksek olarak ölçülmüştür.",
     icon: Play,
-    params: { "İzlenme": "45K+", "Süreklilik": "%72", "Paylaşım": "1.1K" }
+    params: { "İzlenme": "2.4M", "Süreklilik": "%72", "Paylaşım": "1.1K" }
   },
   {
     id: "post",
     title: "Post Etkileşimi",
-    score: "74/100",
+    score: "92/100",
     label: "SABİT AKIŞ",
-    longDesc: "Estetik ağırlıklı lifestyle postlarının kaydedilme oranlarında artış var. Bilgi verici carousel (kaydırmalı) içeriklerin, düz görsellere göre %15 daha fazla etkileşim aldığı saptandı.",
+    longDesc: "Estetik ağırlıklı görsel ve kaydırmalı gönderilerin kaydedilme oranlarında belirgin artış var.",
     icon: Camera,
-    params: { "Kaydetme": "420", "Erişim": "12K", "Dönüş": "%5" }
+    params: { "Kaydetme": "420", "Erişim": "2.4M", "Dönüş": "%19.5" }
   },
   {
     id: "story",
     title: "Hikaye Rezonansı",
     score: "85/100",
     label: "HİKAYE TUTULMASI",
-    longDesc: "Hikaye geçiş oranların (drop-off) oldukça düşük. Bu, kitlenin paylaşımlarını sonuna kadar izlediğini gösteriyor. Ürün önerisi içeren link tıklamaların bu hafta zirve yaptı.",
+    longDesc: "Hikaye geçiş oranların oldukça düşük. Bu kitlenin paylaşımları sonuna kadar izlediğini gösteriyor.",
     icon: Activity,
     params: { "Tıklama": "890", "Cevap": "120", "Bırakma": "%4" }
   },
   {
     id: "comment",
     title: "Yorum Yönetimi",
-    score: "68/100",
+    score: "88/100",
     label: "ETKİLEŞİM HIZI",
-    longDesc: "Takipçilerle kurulan samimiyet skoru yüksek ancak dönüş hızın bu hafta düştü. İlk 30 dakikada verilen cevaplar, algoritma skorunu %20 yukarı taşıma potansiyeline sahip.",
+    longDesc: "İlk 30 dakikada verilen cevaplar algoritma skorunu yukarı taşıma potansiyeline sahiptir.",
     icon: MessageCircle,
-    params: { "Hız": "45dk", "Duygu": "Pozitif", "Cevap": "%60" }
+    params: { "Hız": "45dk", "Duygu": "Pozitif", "Cevap": "%92" }
   },
   {
     id: "community",
     title: "Topluluk Sadakati",
-    score: "90/100",
+    score: "92.4/100",
     label: "KİTLE BAĞLILIĞI",
-    longDesc: "Soru-cevap etkinlikleri ve samimi anketlerle topluluk bağını çok güçlü tutuyorsun. Bu sadakat, uzun vadeli lifestyle marka iş birlikleri için en kritik değerin.",
+    longDesc: "Samimi etkileşimlerle topluluk bağını çok güçlü tutuyorsun.",
     icon: Users,
-    params: { "Sadakat": "%88", "Anket Kat.": "2.4K", "Yeni": "+450" }
+    params: { "Sadakat": "%92.4", "Anket Kat.": "2.4K", "Yeni": "+450" }
   }
 ]
 
-export function PerformancePage() {
+export function PerformancePage({ categoryMap }: PerformancePageProps) {
   const [expandedId, setExpandedId] = useState<string | null>("reels")
+
+  const analytics = categoryMap?.['analytics'] || {}
+  const perfData = categoryMap?.['page_performans'] || {}
+  
+  const pageTitle = perfData.title || analytics.title || "Aksiyon Performansı"
+  const globalScore = analytics.score_value ?? perfData.global_score ?? 95.8
+  
+  const totalViews = analytics.kpi_metrics?.[0]?.value || "2.4M"
+  const totalEngagement = analytics.kpi_metrics?.[1]?.value || "92.4%"
+  const conversionRate = analytics.kpi_metrics?.[2]?.value || "%19.5"
+
+  const performanceData = Array.isArray(perfData.action_bars) && perfData.action_bars.length > 0
+    ? perfData.action_bars.map((b: any, idx: number) => ({
+        action: b.action || b.name,
+        score: b.score || b.value,
+        color: ['#3B82F6', '#60A5FA', '#93C5FD', '#BFDBFE', '#2563EB'][idx % 5]
+      }))
+    : [
+        { action: 'Reels', score: Math.min(100, Math.round(Number(globalScore) * 1.02)), color: '#3B82F6' },
+        { action: 'Post', score: Math.min(100, Math.round(Number(globalScore) * 0.95)), color: '#60A5FA' },
+        { action: 'Hikaye', score: Math.min(100, Math.round(Number(globalScore) * 0.98)), color: '#93C5FD' },
+        { action: 'Yorum', score: Math.min(100, Math.round(Number(globalScore) * 0.92)), color: '#BFDBFE' },
+        { action: 'Topluluk', score: Math.min(100, Math.round(Number(globalScore) * 0.99)), color: '#2563EB' },
+      ]
+
+  const actionCards = Array.isArray(perfData.action_cards) && perfData.action_cards.length > 0
+    ? perfData.action_cards.map((c: any, idx: number) => ({
+        id: c.id || `card-${idx}`,
+        title: c.title || `Aksiyon #${idx + 1}`,
+        score: c.score || `${globalScore}/100`,
+        label: c.label || "AKSİYON KARTI",
+        longDesc: c.longDesc || c.desc || "Kullanıcıya özel aksiyon performans notu.",
+        icon: idx === 0 ? Play : idx === 1 ? Camera : idx === 2 ? Activity : idx === 3 ? MessageCircle : Users,
+        params: c.params || { "Erişim": totalViews, "Dönüş": conversionRate }
+      }))
+    : defaultActionCards
 
   return (
     <div className="animate-in fade-in slide-in-from-bottom-4 duration-1000 pb-20 text-left">
@@ -79,11 +111,11 @@ export function PerformancePage() {
                 <BarChart3 size={14} className="text-blue-500" />
                 <span className="text-[10px] text-blue-500 font-black tracking-[0.3em] uppercase italic text-left">Aşama 03 / Aksiyon Matrisi</span>
               </div>
-              <h3 className="text-4xl font-black text-white italic uppercase tracking-tighter text-left">Aksiyon <span className="text-blue-500">Performansı</span></h3>
+              <h3 className="text-4xl font-black text-white italic uppercase tracking-tighter text-left">{pageTitle}</h3>
               <p className="text-xs text-gray-500 mt-2 font-bold italic uppercase tracking-wider text-left">Haftalık İçerik Dağılım Skorları</p>
             </div>
             <div className="px-5 py-2 bg-blue-500/10 border border-blue-500/20 rounded-2xl shadow-lg shadow-blue-900/10">
-               <span className="text-[10px] font-black text-blue-400 uppercase tracking-widest italic">Global Skor: 81.8</span>
+               <span className="text-[10px] font-black text-emerald-400 uppercase tracking-widest italic">Global Skor: {globalScore}</span>
             </div>
           </div>
           
@@ -116,7 +148,7 @@ export function PerformancePage() {
                 />
                 
                 <Bar dataKey="score" radius={[15, 15, 5, 5]} barSize={60}>
-                  {performanceData.map((entry, index) => (
+                  {performanceData.map((entry: any, index: number) => (
                     <Cell 
                       key={`cell-${index}`} 
                       fill={entry.color} 
@@ -134,21 +166,21 @@ export function PerformancePage() {
               <Eye size={20} className="text-blue-500 group-hover/stat:scale-110 transition-transform" />
               <div className="text-left">
                 <div className="text-[9px] text-gray-600 font-black uppercase tracking-widest text-left">Görüntülenme</div>
-                <div className="text-lg font-black text-white italic text-left">42.8K</div>
+                <div className="text-lg font-black text-white italic text-left">{totalViews}</div>
               </div>
             </div>
             <div className="flex items-center gap-4 p-5 bg-white/[0.02] rounded-[2rem] border border-white/5 transition-all hover:border-blue-400/20 group/stat">
               <MessageSquare size={20} className="text-blue-400 group-hover/stat:scale-110 transition-transform" />
               <div className="text-left">
                 <div className="text-[9px] text-gray-600 font-black uppercase tracking-widest text-left">Etkileşim</div>
-                <div className="text-lg font-black text-white italic text-left">2.4K</div>
+                <div className="text-lg font-black text-white italic text-left">{totalEngagement}</div>
               </div>
             </div>
             <div className="flex items-center gap-4 p-5 bg-white/[0.02] rounded-[2rem] border border-white/5 transition-all hover:border-blue-300/20 group/stat">
               <Share2 size={20} className="text-blue-300 group-hover/stat:scale-110 transition-transform" />
               <div className="text-left">
-                <div className="text-[9px] text-gray-600 font-black uppercase tracking-widest text-left">Paylaşım</div>
-                <div className="text-lg font-black text-white italic text-left">1.1K</div>
+                <div className="text-[9px] text-gray-600 font-black uppercase tracking-widest text-left">Dönüşüm</div>
+                <div className="text-lg font-black text-white italic text-left">{conversionRate}</div>
               </div>
             </div>
           </div>
@@ -156,7 +188,7 @@ export function PerformancePage() {
 
         {/* SAĞ PANEL: AKSİYON KARTLARI */}
         <div className="col-span-12 lg:col-span-5 space-y-4">
-          {actionCards.map((card) => (
+          {actionCards.map((card: any) => (
             <div 
               key={card.id} 
               role="button"
@@ -221,10 +253,10 @@ export function PerformancePage() {
                     </div>
 
                     <div className="grid grid-cols-3 gap-3">
-                      {Object.entries(card.params).map(([key, val]) => (
+                      {Object.entries(card.params || {}).map(([key, val]) => (
                         <div key={key} className="bg-white/5 border border-white/5 rounded-2xl p-3 text-center transition-all hover:border-blue-500/20">
                           <div className="text-[8px] text-gray-600 font-black uppercase mb-1 tracking-widest">{key}</div>
-                          <div className="text-[10px] font-black text-gray-200 italic uppercase">{val}</div>
+                          <div className="text-[10px] font-black text-gray-200 italic uppercase">{String(val)}</div>
                         </div>
                       ))}
                     </div>
