@@ -3,7 +3,8 @@
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { createClient } from "@/utils/supabase/client"
-import { LogOut, User, Building2, Shield } from "lucide-react"
+import { LogOut, Building2, Shield, Search } from "lucide-react"
+import { LiveIndicator } from "@/components/ui/live-indicator"
 
 interface UserNavProps {
   profile?: {
@@ -56,9 +57,28 @@ export function UserNav({ profile }: UserNavProps) {
   const companyName = getCompanyName(profile)
 
   return (
-    <div className="flex items-center gap-3 p-2 pl-4 bg-white/[0.03] rounded-full border border-white/10 backdrop-blur-md">
-      <div className="flex items-center gap-3">
-        <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-blue-600 to-indigo-600 flex items-center justify-center text-white text-xs font-black">
+    <div className="flex items-center gap-2 sm:gap-3 p-1.5 sm:p-2 sm:pl-4 bg-[#0A0A0E]/80 rounded-full border border-white/10 backdrop-blur-xl shadow-lg">
+      {/* Live Stream Status Indicator */}
+      <div className="hidden lg:block">
+        <LiveIndicator label="CANLI SİSTEM" pulseColor="emerald" />
+      </div>
+
+      {/* Quick Search Trigger */}
+      <button
+        onClick={() => router.push("/trend-sensoru")}
+        title="Trend Araması (Ctrl+K)"
+        className="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 text-gray-400 hover:text-white text-[10px] font-bold tracking-wider italic transition-all cursor-pointer min-h-[36px]"
+      >
+        <Search size={12} className="text-blue-400" />
+        <span>Ara / Sensor</span>
+        <kbd className="px-1.5 py-0.5 rounded bg-black/40 text-[9px] font-mono text-gray-400 border border-white/10">
+          ⌘K
+        </kbd>
+      </button>
+
+      {/* User Profile Details */}
+      <div className="flex items-center gap-2.5">
+        <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-blue-600 via-indigo-600 to-purple-600 flex items-center justify-center text-white text-xs font-black shadow-md border border-white/20">
           {displayName.charAt(0).toUpperCase()}
         </div>
         <div className="text-left hidden sm:block">
@@ -84,7 +104,7 @@ export function UserNav({ profile }: UserNavProps) {
         <button
           onClick={() => router.push("/admin")}
           title="Admin Yönetim Paneli"
-          className="flex items-center gap-1 px-3 py-1.5 rounded-full bg-purple-500/10 hover:bg-purple-500/20 border border-purple-500/20 text-purple-300 text-[10px] font-black uppercase tracking-wider italic transition-all cursor-pointer"
+          className="flex items-center justify-center gap-1 min-h-[36px] px-3 py-1.5 rounded-full bg-purple-500/10 hover:bg-purple-500/20 border border-purple-500/30 text-purple-300 text-[10px] font-black uppercase tracking-wider italic transition-all cursor-pointer active:scale-95"
         >
           <Shield size={12} />
           <span className="hidden md:inline">Admin</span>
@@ -96,7 +116,7 @@ export function UserNav({ profile }: UserNavProps) {
         onClick={handleLogout}
         disabled={loggingOut}
         title="Oturumu Kapat"
-        className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 text-red-400 text-[10px] font-black uppercase tracking-wider italic transition-all cursor-pointer disabled:opacity-50"
+        className="flex items-center justify-center gap-1.5 min-h-[36px] px-3 py-1.5 rounded-full bg-red-500/10 hover:bg-red-500/20 border border-red-500/30 text-red-400 text-[10px] font-black uppercase tracking-wider italic transition-all cursor-pointer disabled:opacity-50 active:scale-95"
       >
         <LogOut size={12} />
         <span className="hidden md:inline">{loggingOut ? "Çıkılıyor..." : "Çıkış"}</span>

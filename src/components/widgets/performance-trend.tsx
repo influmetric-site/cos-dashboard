@@ -1,6 +1,8 @@
 "use client"
 
+import { useState } from "react"
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from "recharts"
+import { Activity, Sparkles } from "lucide-react"
 
 interface PerformanceTrendProps {
   data?: {
@@ -20,33 +22,73 @@ const defaultData = [
 export function PerformanceTrend({ data }: PerformanceTrendProps) {
   const title = data?.title ?? "PERFORMANS TRENDİ"
   const chartData = data?.chart_data ?? defaultData
+  const [period, setPeriod] = useState("Günlük")
 
   return (
-    <div className="bg-surface border border-white/5 p-6 rounded-2xl h-full flex flex-col">
-      <div className="flex justify-between items-center mb-6">
-        <h3 className="text-[10px] font-bold tracking-[0.2em] text-gray-500 uppercase">{title}</h3>
-        <select className="bg-background border border-white/10 text-[10px] text-gray-400 rounded px-2 py-1 outline-none">
-          <option>Günlük</option>
+    <div className="glass-card glass-card-hover p-6 sm:p-8 rounded-[2rem] h-full flex flex-col justify-between space-y-6 relative overflow-hidden border border-white/10">
+      {/* Header */}
+      <div className="flex items-center justify-between gap-4">
+        <div className="flex items-center gap-2">
+          <div className="p-2 rounded-xl bg-purple-500/10 border border-purple-500/20">
+            <Activity size={16} className="text-purple-400" />
+          </div>
+          <div>
+            <h3 className="text-xs font-black tracking-widest text-gray-300 uppercase italic">
+              {title}
+            </h3>
+            <p className="text-[10px] text-gray-500 font-bold uppercase tracking-wider italic flex items-center gap-1">
+              <Sparkles size={10} className="text-purple-400" />
+              Yapay Zekâ Tahmin Modeli
+            </p>
+          </div>
+        </div>
+
+        <select
+          value={period}
+          onChange={(e) => setPeriod(e.target.value)}
+          className="bg-black/40 border border-white/15 text-[10px] font-bold text-gray-300 rounded-xl px-3 py-1.5 outline-none cursor-pointer hover:border-purple-500/40 transition-all min-h-[32px]"
+        >
+          <option value="Günlük">Günlük Akış</option>
+          <option value="Haftalık">Haftalık Trend</option>
+          <option value="Aylık">Aylık Konsolide</option>
         </select>
       </div>
+
+      {/* Line Chart */}
       <div className="flex-1 w-full min-h-[250px] min-w-0">
         <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={250}>
           <LineChart data={chartData}>
-            <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" vertical={false} />
-            <XAxis dataKey="name" stroke="#4B5563" fontSize={10} tickLine={false} axisLine={false} />
-            <YAxis stroke="#4B5563" fontSize={10} tickLine={false} axisLine={false} />
-            <Tooltip contentStyle={{ backgroundColor: '#111827', border: '1px solid rgba(255,255,255,0.1)' }} />
-            <Legend iconType="circle" wrapperStyle={{ fontSize: '10px', paddingTop: '20px' }} />
-            <Line 
-              type="monotone" 
-              dataKey="real" 
-              name="Gerçekleşen Performans" 
-              stroke="#3B82F6" 
-              strokeWidth={3} 
-              dot={{ r: 4, fill: '#3B82F6' }} 
-              style={{ filter: "drop-shadow(0 0 10px #3B82F6)" }}
+            <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)" vertical={false} />
+            <XAxis dataKey="name" stroke="rgba(255,255,255,0.3)" fontSize={10} tickLine={false} axisLine={false} />
+            <YAxis stroke="rgba(255,255,255,0.3)" fontSize={10} tickLine={false} axisLine={false} />
+            <Tooltip
+              contentStyle={{
+                backgroundColor: "#0A0A0E",
+                border: "1px solid rgba(255,255,255,0.15)",
+                borderRadius: "12px",
+                boxShadow: "0 8px 32px rgba(0,0,0,0.5)",
+              }}
+              labelStyle={{ color: "#9CA3AF", fontSize: "11px", fontWeight: "bold" }}
             />
-            <Line type="monotone" dataKey="predict" name="Tahmin Edilen Performans" stroke="#8B5CF6" strokeWidth={2} strokeDasharray="5 5" dot={false} />
+            <Legend iconType="circle" wrapperStyle={{ fontSize: "11px", paddingTop: "16px", color: "#E5E7EB" }} />
+            <Line
+              type="monotone"
+              dataKey="real"
+              name="Gerçekleşen Performans"
+              stroke="#3B82F6"
+              strokeWidth={3}
+              dot={{ r: 4, fill: "#3B82F6" }}
+              style={{ filter: "drop-shadow(0 0 12px rgba(59,130,246,0.6))" }}
+            />
+            <Line
+              type="monotone"
+              dataKey="predict"
+              name="AI Tahmin Projeksiyonu"
+              stroke="#8B5CF6"
+              strokeWidth={2.5}
+              strokeDasharray="6 6"
+              dot={false}
+            />
           </LineChart>
         </ResponsiveContainer>
       </div>

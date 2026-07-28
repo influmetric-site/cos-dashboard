@@ -1,25 +1,36 @@
 "use client"
 
 import { usePathname } from "next/navigation"
+import { MobileNav } from "@/components/layout/mobile-nav"
+import { LiveIndicator } from "@/components/ui/live-indicator"
 
 export function MainContent({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
   const isLogin = pathname === "/login"
 
   return (
-    <main className={`flex-1 ${isLogin ? "ml-0 p-0" : "ml-64 p-12"} overflow-x-hidden transition-all`}>
+    <main
+      className={`flex-1 ${
+        isLogin
+          ? "ml-0 p-0"
+          : "ml-0 md:ml-64 p-4 sm:p-6 md:p-8 lg:p-12 pb-24 md:pb-12"
+      } overflow-x-hidden transition-all duration-300 min-h-screen`}
+    >
       {!isLogin && (
-        <div className="flex justify-end gap-3 mb-8 px-6">
-          <div className="px-4 py-1.5 bg-white/[0.03] border border-white/5 rounded-full text-[9px] text-gray-500 font-black tracking-[0.2em] uppercase italic">
-            v2.4.0-STABLE
+        <div className="flex items-center justify-between gap-3 mb-6 sm:mb-8 px-2 sm:px-4">
+          <div className="flex items-center gap-2">
+            <span className="px-3 py-1 bg-white/[0.04] border border-white/10 rounded-full text-[9px] text-gray-400 font-black tracking-[0.2em] uppercase italic">
+              v2.5.0-PRO
+            </span>
           </div>
-          <div className="flex items-center gap-2 px-4 py-1.5 bg-blue-500/10 border border-blue-500/20 rounded-full text-[9px] text-blue-400 font-black tracking-[0.2em] uppercase italic">
-            <div className="w-1.5 h-1.5 bg-blue-500 rounded-full animate-pulse shadow-[0_0_8px_rgba(59,130,246,0.8)]" />
-            Canlı Veri Akışı
+
+          <div className="flex items-center gap-3">
+            <LiveIndicator label="SİSTEM AKIŞI AKTİF" pulseColor="emerald" />
           </div>
         </div>
       )}
       {children}
+      {!isLogin && <MobileNav />}
     </main>
   )
 }

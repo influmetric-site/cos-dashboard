@@ -45,7 +45,7 @@ export function Sidebar() {
   };
 
   return (
-    <aside className="w-64 h-screen bg-[#0A0A0B] border-r border-white/5 flex flex-col fixed left-0 top-0 z-50 overflow-hidden font-sans">
+    <aside className="hidden md:flex w-64 h-screen bg-[#0A0A0B] border-r border-white/5 flex-col fixed left-0 top-0 z-50 overflow-hidden font-sans">
       
       {/* LOGO AREA */}
       <div className="p-8 border-b border-white/5">
