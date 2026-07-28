@@ -3,8 +3,7 @@
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { createClient } from "@/utils/supabase/client"
-import { LogOut, Building2, Shield, Search } from "lucide-react"
-import { LiveIndicator } from "@/components/ui/live-indicator"
+import { LogOut, Building2, Shield } from "lucide-react"
 
 interface UserNavProps {
   profile?: {
@@ -58,24 +57,6 @@ export function UserNav({ profile }: UserNavProps) {
 
   return (
     <div className="flex items-center gap-2 sm:gap-3 p-1.5 sm:p-2 sm:pl-4 bg-[#0A0A0E]/80 rounded-full border border-white/10 backdrop-blur-xl shadow-lg">
-      {/* Live Stream Status Indicator */}
-      <div className="hidden lg:block">
-        <LiveIndicator label="CANLI SİSTEM" pulseColor="emerald" />
-      </div>
-
-      {/* Quick Search Trigger */}
-      <button
-        onClick={() => router.push("/trend-sensoru")}
-        title="Trend Araması (Ctrl+K)"
-        className="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 text-gray-400 hover:text-white text-[10px] font-bold tracking-wider italic transition-all cursor-pointer min-h-[36px]"
-      >
-        <Search size={12} className="text-blue-400" />
-        <span>Ara / Sensor</span>
-        <kbd className="px-1.5 py-0.5 rounded bg-black/40 text-[9px] font-mono text-gray-400 border border-white/10">
-          ⌘K
-        </kbd>
-      </button>
-
       {/* User Profile Details */}
       <div className="flex items-center gap-2.5">
         <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-blue-600 via-indigo-600 to-purple-600 flex items-center justify-center text-white text-xs font-black shadow-md border border-white/20">
