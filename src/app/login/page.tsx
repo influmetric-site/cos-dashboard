@@ -101,7 +101,7 @@ export default function LoginPage() {
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-500/10 border border-blue-500/20 backdrop-blur-md">
             <Cpu size={14} className="text-blue-400 fill-blue-400 animate-pulse" />
             <span className="text-[10px] font-black uppercase tracking-[0.3em] text-blue-400 italic">
-              Yetkili Kullanıcı Portalı
+              Kullanıcı Giriş Portalı
             </span>
           </div>
           
@@ -195,7 +195,7 @@ export default function LoginPage() {
           <div className="pt-4 border-t border-white/5 text-center space-y-1">
             <div className="flex items-center justify-center gap-1.5 text-emerald-400 text-[10px] uppercase font-black tracking-widest italic">
               <ShieldCheck size={14} className="text-emerald-400 shrink-0" />
-              <span>Yetkili Kullanıcı Portalı</span>
+              <span>Kullanıcı Giriş Portalı</span>
             </div>
             <p className="text-[10px] text-gray-500 italic leading-relaxed">
               Platformumuz kapalı sistem mimarisiyle korunmaktadır. Erişim yalnızca önceden yetkilendirilmiş hesaplarla sağlanmakta olup, dışarıdan kayıt kabul edilmemektedir.
